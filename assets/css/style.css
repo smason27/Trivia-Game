@@ -1,3 +1,15 @@
 #wrapper {
-    background-color: coral;
+    background-image: url("../images/Sonics\ court.jpg");
+    background-size: cover;
+    height: 510px;
+}
+
+.gameArea {
+    padding-top: 50px
+}
+
+.container {
+    max-width: 960px;
+    text-align: center;
+    margin: auto;
 }

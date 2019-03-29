@@ -42,25 +42,27 @@ var answer = "";
 $(document).ready(function () {
     $("#start").show();
     $("#start").on("click", startGame);
-    $("#results").on("click", startGame);
-    $("#results").hide();
+    $("#playAgain").on("click", startGame);
+    $("#playAgain").hide();
     $("#wrapper").hide();
 
 })
 
 function startGame() {
     $("#start").hide();
-    $("#results").hide();
+    $("#playAgain").hide();
     $("#wrapper").show()
     questionsCorrect = 0;
     questionsWrong = 0;
     questionsSkipped = 0;
     timerOn = false;
-    chosenQuestions = [];
+    chosenQuestions = game;
+    console.log(chosenQuestions)
     currentQuestion = "";
     choices = [];
     answer = "";
     remainingTime = 15;
+    timerStart();
     nextQuestion();
 }
 
@@ -77,8 +79,8 @@ function timerStop() {
 }
 
 function decrement() {
-    $("#timer").html("<h2>You have: " + remainingTime + " seconds left</h2>");
     remainingTime--;
+    $("#timer").html("<h2>You have: " + remainingTime + " seconds left</h2>");
     if (remainingTime === 0) {
         questionsSkipped++;
         timerStop();
@@ -88,12 +90,13 @@ function decrement() {
 
 
 function nextQuestion() {
-    timerStart();
+    // timerStart();
     $("#timer").html("<h2>You have: " + remainingTime + " seconds left</h2>");
     $("#wrapper").show()
-    currentQuestion = game[Math.floor(Math.random() * game.length)]
-    chosenQuestions.push(currentQuestion)
-    checkQuestion();
+    var currentQuestionIndex = Math.floor(Math.random() * game.length);
+    currentQuestion = game[currentQuestionIndex]
+    chosenQuestions.splice(currentQuestionIndex, 1) 
+    console.log(chosenQuestions)
     choices = currentQuestion.options
     answer = currentQuestion.answer
     $("#question").empty();
@@ -110,11 +113,11 @@ function nextQuestion() {
     $(document).on("click", ".bballChoices", checkAnswer);
 }
 
-function checkQuestion() {
-    if(currentQuestion === chosenQuestions.indexOf()) {
-        nextQuestion();
-    }
-}
+// function checkQuestion() {
+//     if(chosenQuestions.indexOf(currentQuestion) !== -1) {
+//         nextQuestion();
+//     }
+// }
 
 function checkAnswer() {
     userPick = $(this).attr("data-name");
@@ -123,6 +126,7 @@ function checkAnswer() {
         timerStop();
     } else {
         questionsWrong++;
+        $("#")
         timerStop();
     }
     console.log(questionsCorrect)
@@ -133,13 +137,15 @@ function checkAnswer() {
 
 function checkWin() {
     console.log(game.length)
-    if(questionsCorrect + questionsWrong + questionsSkipped === game.length) {
+    if(chosenQuestions <= 0) {
         $("#question").empty();
         $("#choices").empty();
-        $("#question").append("You got " + questionsCorrect + " correct");
-        $("#choices").append("You got " + questionsWrong + " wrong");
-        $("#choices").append("you missed ")
-        $("#results").show()
+        $("#questions").html("<h2>GAME OVER</h2>")
+        $("#choices").append("<h2> You got " + questionsCorrect + " correct!</h2>");
+        $("#choices").append("<h2>You got " + questionsWrong + " wrong!</h2>");
+        $("#choices").append("<h2>you missed " + questionsSkipped + " questions!</h2>")
+        $("#playAgain").show()
+        resetGame();
     } else {
         remainingTime = 15;
         timerStart();
@@ -147,3 +153,13 @@ function checkWin() {
     }
     
 }
+
+function resetGame() {
+    currentQuestion = [];
+    chosenQuestions = game;
+    questionsCorrect = 0;
+    questionsWrong = 0;
+    questionsSkipped = 0;
+}
+   
+
