@@ -40,7 +40,7 @@ var choices = [];
 var answer = "";
 
 $(document).ready(function () {
-    $("#start").show();
+    $("#start").css("visibility", "visible");
     $("#start").on("click", startGame);
     $("#playAgain").on("click", startGame);
     $("#playAgain").hide();
@@ -49,7 +49,7 @@ $(document).ready(function () {
 })
 
 function startGame() {
-    $("#start").hide();
+    $("#start").css("visibility", "hidden");
     $("#playAgain").hide();
     $("#wrapper").show()
     questionsCorrect = 0;
@@ -100,7 +100,7 @@ function nextQuestion() {
     choices = currentQuestion.options
     answer = currentQuestion.answer
     $("#question").empty();
-    $("#question").append(currentQuestion.question)
+    $("#question").append("<h3>" + currentQuestion.question + "</h3>")
     $("#choices").empty();
     for (var i = 0; i < choices.length; i++) {
         var a = $("<button>");
@@ -138,12 +138,13 @@ function checkAnswer() {
 function checkWin() {
     console.log(game.length)
     if(chosenQuestions <= 0) {
+        $("#timer").empty();
         $("#question").empty();
         $("#choices").empty();
-        $("#questions").html("<h2>GAME OVER</h2>")
-        $("#choices").append("<h2> You got " + questionsCorrect + " correct!</h2>");
-        $("#choices").append("<h2>You got " + questionsWrong + " wrong!</h2>");
-        $("#choices").append("<h2>you missed " + questionsSkipped + " questions!</h2>")
+        $("#timer").append("<h2>GAME OVER</h2>")
+        $("#question").append("<h2> You got " + questionsCorrect + " correct!</h2>");
+        $("#question").append("<h2>You got " + questionsWrong + " wrong!</h2>");
+        $("#question").append("<h2>you missed " + questionsSkipped + " questions!</h2>")
         $("#playAgain").show()
         resetGame();
     } else {
@@ -160,6 +161,9 @@ function resetGame() {
     questionsCorrect = 0;
     questionsWrong = 0;
     questionsSkipped = 0;
+    choices = [];
+    answer = "";
+    
 }
    
 
